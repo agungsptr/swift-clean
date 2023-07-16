@@ -1,0 +1,19 @@
+name: CleanSwift
+options:
+  bundleIdPrefix: com.agungsptr
+  settings:
+    iOS:
+      TARGETED_DEVICE_FAMILY: "1"  # 1 for iPhone, 2 for iPad
+targets:
+  CleanSwift:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.4"
+    sources:
+      - CleanSwift
+    info:
+      path: App/Info.plist
+      properties:
+        UILaunchScreen: LaunchScreen
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
