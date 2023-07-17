@@ -1,43 +1,35 @@
 //
-//  TodoUseCase.swift
+//  File.swift
 //  CleanSwift
 //
-//  Created by Agung Saputra on 16/07/23.
+//  Created by Agung Saputra on 17/07/23.
 //
 
 import Foundation
 
 protocol TodoUseCase {
-    func findAll(
-        completion: @escaping (Result<[TodoModel], Error>) -> Void
-    ) throws
-    func create(
-        data: TodoModel,
-        completion: @escaping (Result<TodoModel, Error>) -> Void
-    ) throws
+    func findAll() -> Result<[TodoModel], TodoError>
+    func create(todo: TodoModel) -> Result<TodoModel, TodoError>
 }
 
-class TodoUseCaseImpl: TodoUseCase {
-    private let repository: TodoRepository
+struct TodoUseCaseImpl: TodoUseCase {
+    var repository: TodoRepository
     
-    init(repository: TodoRepository) {
-        self.repository = repository
-    }
-    
-    func findAll(
-        completion: @escaping (Result<[TodoModel], Error>) -> Void
-    ) throws {
-        try repository.findAll() { res in
-            completion(res)
+    func findAll() -> Result<[TodoModel], TodoError> {
+        do {
+            let data = try repository.findAll()
+            return .success(data)
+        } catch {
+            return .failure(.FetchError)
         }
     }
     
-    func create(
-        data: TodoModel,
-        completion: @escaping (Result<TodoModel, Error>) -> Void
-    ) throws {
-        try repository.create(data: data) { res in
-            completion(res)
+    func create(todo: TodoModel) -> Result<TodoModel, TodoError> {
+        do {
+            let data = try repository.create(todo: todo)
+            return .success(data)
+        } catch {
+            return .failure(.CreateError)
         }
     }
 }

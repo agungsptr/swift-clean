@@ -6,50 +6,39 @@
 //
 
 import Foundation
-import CoreData
 
 @MainActor
-class ContentViewModel: NSObject, ObservableObject {
+class ContentViewModel: ObservableObject {
     @Published var todos = [TodoModel]()
-    
-    private(set) var context: NSManagedObjectContext
     private let db: TodoUseCase
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
-        self.db = TodoInjec(context: context).todo()
-        super.init()
+    init() {
+        self.db = TodoInjec().todo()
         findAll()
     }
     
     func findAll() {
-        do {
-            try db.findAll() { res in
-                switch res {
-                case .success(let records):
-                    self.todos = records
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        } catch {
+        let res = self.db.findAll()
+        switch res {
+        case .success(let data):
+            self.todos = data
+        case .failure(let error):
             print(error)
         }
     }
     
     func save() {
-        do {
-            let dataModel = TodoModel(
-                id: .init(),
-                title: "Hahaha",
-                desc: "Yuhuh",
-                createdAt: Date()
-            )
-            try db.create(data: dataModel) { res in
-                self.findAll()
-                print("berhasil tambah")
-            }
-        } catch {
+        let dataModel = TodoModel(
+            id: .init(),
+            title: "Hahaha",
+            desc: "Yuhuh",
+            createdAt: Date()
+        )
+        let res = self.db.create(todo: dataModel)
+        switch res {
+        case .success(_):
+            self.findAll()
+        case .failure(let error):
             print(error)
         }
     }

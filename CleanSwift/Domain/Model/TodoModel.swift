@@ -10,6 +10,6 @@ import Foundation
 struct TodoModel: Identifiable {
     let id: UUID
     let title: String
-    var desc: String
+    let desc: String?
     let createdAt:  Date
 }

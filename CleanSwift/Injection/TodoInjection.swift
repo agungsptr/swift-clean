@@ -6,22 +6,10 @@
 //
 
 import Foundation
-import CoreData
 
-class TodoInjec {
-    private(set) var context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-    
-    private func getRepo() -> TodoRepository {
-        let todoDataSource: TodoDataSource = TodoDataSourceImpl.shared(context)
-        return TodoRepositoryImpl.shared(todoDataSource)
-    }
-    
+struct TodoInjec {
     func todo() -> TodoUseCase {
-        let repo = getRepo()
+        let repo = TodoRepositoryImpl(dataSource: TodoDataSourceImpl())
         return TodoUseCaseImpl(repository: repo)
     }
 }

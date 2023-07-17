@@ -6,15 +6,9 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject private var contentVM: ContentViewModel
-    
-    init(vm: ContentViewModel) {
-        self.contentVM = vm
-    }
+    @ObservedObject private var contentVM: ContentViewModel = ContentViewModel()
     
     var body: some View {
         NavigationView {
@@ -23,7 +17,7 @@ struct ContentView: View {
                     NavigationLink {
                         VStack {
                             Text(todo.title)
-                            Text(todo.desc)
+                            Text(todo.desc ?? "")
                             Text("\(todo.createdAt, formatter: itemFormatter)")
                             Text("\(todo.id)")
                         }
@@ -56,9 +50,6 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let context = PersistenceController.shared.container.viewContext
-        let vm = ContentViewModel(context: context)
-        ContentView(vm: vm)
-            .environment(\.managedObjectContext, context)
+        ContentView()
     }
 }
