@@ -10,6 +10,9 @@ import Foundation
 @MainActor
 class ContentViewModel: ObservableObject {
     @Published var todos = [TodoModel]()
+    @Published var title = ""
+    @Published var desc = ""
+    
     private let db: TodoUseCase
     
     init() {
@@ -30,8 +33,8 @@ class ContentViewModel: ObservableObject {
     func save() {
         let dataModel = TodoModel(
             id: .init(),
-            title: "Hahaha",
-            desc: "Yuhuh",
+            title: self.title,
+            desc: self.desc,
             createdAt: Date()
         )
         let res = self.db.create(todo: dataModel)

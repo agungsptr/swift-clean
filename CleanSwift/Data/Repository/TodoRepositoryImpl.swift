@@ -11,7 +11,7 @@ struct TodoRepositoryImpl: TodoRepository {
     var dataSource: TodoDataSource
     
     func findAll() throws -> [TodoModel] {
-        let data =  try dataSource.findAll()
+        let data = try dataSource.findAll()
         return data
     }
     

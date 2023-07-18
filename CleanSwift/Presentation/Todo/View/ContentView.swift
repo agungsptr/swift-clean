@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject private var contentVM: ContentViewModel = ContentViewModel()
+    @ObservedObject private var contentVM = ContentViewModel()
+    @State private var showingSheet = false
     
     var body: some View {
         NavigationView {
@@ -29,13 +30,29 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            contentVM.save()
-                        }
+//                        withAnimation(.easeInOut(duration: 0.25)) {
+//                            contentVM.save()
+//                        }
+                        showingSheet.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
                 }
+            }
+            .sheet(isPresented: $showingSheet) {
+                VStack {
+                    Form {
+                        TextField("Title", text: $contentVM.title)
+                        TextField("Description", text: $contentVM.desc)
+                    }
+                    Button {
+                        contentVM.save()
+                        showingSheet.toggle()
+                    } label: {
+                        Text("Save")
+                    }
+                }
+
             }
         }
     }
